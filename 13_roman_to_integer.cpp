@@ -8,15 +8,14 @@ class Solution
 	public:
 		int romanToInt(string s)
 		{
-			unordered_map<char, int>	rint = {
-				{ 'I', 1 },
-				{ 'V', 5 },
-				{ 'X', 10 },
-				{ 'L', 50 },
-				{ 'C', 100 },
-				{ 'D', 500 },
-				{ 'M', 1000 }
-			};
+			int	rint['Z' + 1] = { 0, };
+			rint['I'] = 1;
+			rint['V'] = 5;
+			rint['X'] = 10;
+			rint['L'] = 50;
+			rint['C'] = 100;
+			rint['D'] = 500;
+			rint['M'] = 1000;
 
 			string::size_type	i = s.length() - 1;
 			int	bef = rint[s[i]];
