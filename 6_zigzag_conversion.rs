@@ -1,7 +1,7 @@
 struct Solution;
 
 // 지그재그 인덱스 배치. 각 인덱스의 누적합 배열을 만들어서 각 문자 자리찾기.
-    // O(n)
+// O(n)
 impl Solution {
     pub fn convert(s: String, num_rows: i32) -> String {
         let slen = s.len();
@@ -42,10 +42,4 @@ impl Solution {
 
         rs
     }
-}
-
-fn main() {
-//    let s = String::from("PAYPALISHIRING");
-    let s = String::from("AB");
-    println!("{}", Solution::convert(s, 1));
 }
