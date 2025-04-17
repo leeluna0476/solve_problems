@@ -41,7 +41,7 @@ fn backtrack(start: usize, in_use: &mut Vec<bool>, result: &mut Vec<usize>, (n, 
         return;
     }
 
-    for i in start..(n+1) {
+    for i in start..(n + 1) {
         if in_use[i] == false {
             result.push(i);
             in_use[i] = true;
