@@ -41,18 +41,16 @@ fn main() {
 
     numbers.sort();
 
-    let mut in_use: Vec<bool> = vec![false; 10001];
     let mut permuts = HashSet::<Vec<usize>>::new();
     let mut result: Vec<usize> = Vec::<usize>::new();
 
     let mut writer = BufWriter::new(io::stdout().lock());
 
-    backtrack(&numbers, &mut in_use, &mut result, &mut permuts, (n, m), &mut writer);
+    backtrack(&numbers, &mut result, &mut permuts, (n, m), &mut writer);
 }
 
 fn backtrack(
     numbers: &Vec<usize>,
-    in_use: &mut Vec<bool>,
     result: &mut Vec<usize>,
     permuts: &mut HashSet<Vec<usize>>,
     (n, m): (usize, usize),
@@ -70,7 +68,7 @@ fn backtrack(
 
     for i in 0..n {
         result.push(numbers[i]);
-        backtrack(numbers, in_use, result, permuts, (n, m), writer);
+        backtrack(numbers, result, permuts, (n, m), writer);
         result.pop();
     }
 }
