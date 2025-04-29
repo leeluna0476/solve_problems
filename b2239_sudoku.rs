@@ -81,7 +81,6 @@ fn parse_board(map: &mut [(bool, Vec<(usize, usize)>); 10]) -> [[(u8, bool); 9];
             .read_line(&mut line)
             .expect("Failed to read line");
 
-//        let mut iters = line.split_whitespace();
         let bytes = line.as_bytes();
         for x in 0..(9 as usize) {
             board[y][x].0 = bytes[x] - b'0';
