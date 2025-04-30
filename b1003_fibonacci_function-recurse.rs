@@ -41,7 +41,9 @@ fn main() {
         stdin
             .read_line(&mut line)
             .expect("No line");
-        let n: u8 = line.trim().parse().expect("Failed to parse T");
+        let n: u8 = line.trim()
+            .parse()
+            .expect("Failed to parse T");
         let (z, o) = Fibonacci::count_zero_and_one(n);
         printbuf.push_str(&format!("{z} {o}\n"));
     }
@@ -50,3 +52,6 @@ fn main() {
 
 // 0 1 1 2 3 5 8 13 21 34 55 89 ...
 // 각 단계 아래에 있는 1, 0이 몇 개인지 기록.
+// 시간복잡도:
+//  _inner_fibonacci는 각 n에 대해 최대 한번 호출됨. if문도 최대 한번 평가됨. -> O(1)의 연산을 n번 수행.
+//  -> O(n)

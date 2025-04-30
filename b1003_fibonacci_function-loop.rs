@@ -36,7 +36,9 @@ fn main() {
         stdin
             .read_line(&mut line)
             .expect("No line");
-        let n: usize = line.trim().parse().expect("Failed to parse T");
+        let n: usize = line.trim()
+            .parse()
+            .expect("Failed to parse T");
         let (z, o) = Fibonacci::count_zero_and_one(n);
         printbuf.push_str(&format!("{z} {o}\n"));
     }
@@ -46,5 +48,5 @@ fn main() {
 // Z_0 = 1, Z_1 = 0, Z_i = Z_{i-1} + Z_{i-2} (2 <= i <= n)
 // O_0 = 0, O_1 = 0, O_i = O_{i-1} + O_{i-2} (2 <= i <= n)
 // 시간복잡도:
-//  0과 1이 출력되는 횟수 각각 n + 1번 계산.
+//  각 단계마다 2번 연산. -> O(1)의 연산을 n+1번 수행.
 //  -> O(n)
