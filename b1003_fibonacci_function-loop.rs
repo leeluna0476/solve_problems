@@ -4,20 +4,21 @@ struct Fibonacci;
 
 impl Fibonacci {
     fn count_zero_and_one(n: usize) -> (u32, u32) {
-        if n == 0 {
-            return (1, 0);
+        let mut zero: (u32, u32) = (1, 0);
+        let mut one: (u32, u32) = (0, 1);
+
+        for _i in 0..n {
+            let new_zero = zero.1 + zero.0;
+            let new_one = one.1 + one.0;
+
+            zero.0 = zero.1;
+            zero.1 = new_zero;
+
+            one.0 = one.1;
+            one.1 = new_one;
         }
 
-        let mut memo: Vec<(u32, u32)> = vec![(0, 0); n + 1];
-        memo[0].0 = 1;
-        memo[1].1 = 1;
-
-        for i in 2..=n {
-            memo[i].0 = memo[i - 1].0 + memo[i - 2].0;
-            memo[i].1 = memo[i - 1].1 + memo[i - 2].1;
-        }
-
-        memo[n]
+        (zero.0, one.0)
     }
 }
 
@@ -50,3 +51,6 @@ fn main() {
 // 시간복잡도:
 //  각 단계마다 2번 연산. -> O(1)의 연산을 n+1번 수행.
 //  -> O(n)
+// 공간복잡도:
+//  고정된 튜플의 크기.
+//  -> O(1)
