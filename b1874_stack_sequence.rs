@@ -13,7 +13,6 @@ fn main() {
         .expect("Invalid number");
 
     let mut sequence = Vec::<u32>::with_capacity(n);
-    let mut stack = Vec::<u32>::with_capacity(n);
 
     for _i in 0..n {
         let num: u32 = lines
@@ -28,6 +27,12 @@ fn main() {
     }
 
     let mut printbuf = String::new();
+
+    // 시간복잡도:
+    // n번 push (printbuf push too)
+    // n번 pop (printbuf push too)
+    // O(n)
+    let mut stack = Vec::<u32>::new();
     let mut the_last = 0;
     for num in sequence {
         for i in (the_last + 1)..=num {
