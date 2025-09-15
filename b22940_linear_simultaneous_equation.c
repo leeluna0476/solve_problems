@@ -56,8 +56,13 @@ int	main() {
 		}
 	}
 
-	for (int i = 0; i < n - 1; ++i) {
-		printf("%ld ", lroundf(solutions[i]));
+	for (int i = 0; i < n; ++i) {
+		printf("%f ", solutions[i]);
 	}
-	printf("%ld\n", lroundf(solutions[n - 1]));
+	printf("\n");
+
+//	for (int i = 0; i < n - 1; ++i) {
+//		printf("%ld ", lroundf(solutions[i]));
+//	}
+//	printf("%ld\n", lroundf(solutions[n - 1]));
 }
