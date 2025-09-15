@@ -36,7 +36,7 @@ int	main() {
 
 			for (int k = t; k < n - 1; ++k) {
 				for (int i = 0; i <= n; ++i) {
-					A[t][i] = A[t + 1][i];
+					A[k][i] = A[k + 1][i];
 				}
 			}
 			for (int i = 0; i <= n; ++i) {
