@@ -1,80 +1,193 @@
 #include <stdio.h>
 
-#define MAX_NODES 10001
-#define MAX_EDGES 100001
-#define INF 1000001
+#define MAX_V 10000
+#define MAX_E 100000
 
-int head[MAX_NODES];
-int to[MAX_EDGES * 2];
-int next[MAX_EDGES * 2];
-int distance[MAX_EDGES * 2];
-int edge_no = 1;
-int v, e;
+typedef struct edge {
+	int a;
+	int b;
+	int dist;
+} edge_t;
 
-void add_edge(int node1, int node2, int dist) {
-	to[edge_no] = node2;
-	next[edge_no] = head[node1];
-	head[node1] = edge_no;
-	distance[edge_no] = dist;
-	++edge_no;
+edge_t edges[MAX_E];
+int v;
+int e;
+
+/* HEAP */
+typedef struct heap {
+	edge_t storage[MAX_E + 1];
+	int size;
+} heap_t;
+
+#define PARENT(i) (i >> 1)
+#define LEFT(i) (i << 1)
+#define RIGHT(i) ((i << 1) + 1)
+#define KEY(i) (ht->storage[i].dist)
+
+void swap(edge_t *a, edge_t *b) {
+	edge_t t = *a;
+	*a = *b;
+	*b = t;
 }
 
-void init_prim_dist(int *dist) {
-	dist[1] = 0;
-	for (int i = 2; i <= v; ++i) {
-		dist[i] = INF;
+void init_heap(heap_t *ht) {
+	ht->size = 0;
+}
+
+char is_empty_heap(heap_t *ht) {
+	return !ht->size;
+}
+
+char is_full_heap(heap_t *ht) {
+	return ht->size == MAX_E;
+}
+
+void push_minheap(heap_t *ht, edge_t edge) {
+	if (is_full_heap(ht)) {
+		return;
 	}
-}
-
-int dist_per_edge(int a, int b) {
-	int edge = head[a];
-	while (edge) {
-		if (to[edge] == b) {
-			return distance[edge];
+	ht->storage[++ht->size] = edge;
+	int i = ht->size;
+	while (i > 1) {
+		int parent = PARENT(i);
+		if (KEY(i) >= KEY(parent)) {
+			return;
 		}
-		edge = next[edge];
+		swap(&ht->storage[i], &ht->storage[parent]);
+		i = parent;
 	}
-	return INF;
 }
 
-void Prim_MST(int *dist, int *selected, int node, int *ans) {
-	int min = v + 1;
-	for (int i = 1; i <= v; ++i) {
-		int d = dist_per_edge(node, i);
-		if (!selected[i]) {
-			if (d < dist[i]) {
-				dist[i] = d;
+edge_t pop_minheap(heap_t *ht) {
+	edge_t ret;
+	if (!is_empty_heap(ht)) {
+		ret = ht->storage[1];
+		ht->storage[1] = ht->storage[ht->size--];
+		int i = 1;
+		while (LEFT(i) <= ht->size) {
+			int l = LEFT(i);
+			int r = RIGHT(i);
+			int child = l == ht->size ? l : (KEY(l) <= KEY(r) ? l : r);
+			if (KEY(i) <= KEY(child)) {
+				break;
 			}
-			if (min == v + 1 || dist[i] < dist[min]) {
-				min = i;
-			}
+			swap(&ht->storage[i], &ht->storage[child]);
+			i = child;
 		}
 	}
+	return ret;
+}
 
-	if (min != v + 1) {
-		selected[min] = 1;
-		*ans += dist[min];
-		Prim_MST(dist, selected, min, ans);
+void heap_sort(void) {
+	heap_t ht;
+	init_heap(&ht);
+	for (int i = 0; i < e; ++i) {
+		push_minheap(&ht, edges[i]);
+	}
+	for (int i = 0; i < e; ++i) {
+		edges[i] = pop_minheap(&ht);
 	}
 }
 
-int MST(void) {
-	int dist[MAX_NODES];
-	init_prim_dist(dist);
-	int selected[MAX_NODES] = { 0 };
-	selected[1] = 1;
-	int mst_dist = 0;
-	Prim_MST(dist, selected, 1, &mst_dist);
-	return mst_dist;
+/* STACK */
+typedef struct pair {
+	int a;
+	int b;
+} pair_t;
+
+typedef struct stack {
+	pair_t storage[MAX_V];
+	int top;
+} stk_t;
+
+stk_t stk;
+
+void init_stk(void) {
+	stk.top = -1;
+}
+
+char is_empty_stk(void) {
+	return stk.top == -1;
+}
+
+char is_full_stk(void) {
+	return stk.top + 1 == MAX_V;
+}
+
+void push_stk(pair_t val) {
+	if (is_full_stk()) {
+		return;
+	}
+	stk.storage[++stk.top] = val;
+}
+
+pair_t pop_stk(void) {
+	pair_t p;
+	if (is_empty_stk()) {
+		return p;
+	}
+	return stk.storage[stk.top--];
+}
+
+/* KRUSKAL */
+int parent[MAX_V + 1];
+
+void init_parent() {
+	for (int i = 0; i <= v; ++i) {
+		parent[i] = i;
+	}
+}
+
+int get_parent(int x) {
+	init_stk();
+	int t = x;
+	while (parent[t] != t) {
+		pair_t p = { t, parent[t] };
+		push_stk(p);
+		t = parent[t];
+	}
+	while (!is_empty_stk()) {
+		pair_t p = pop_stk();
+		parent[p.a] = parent[p.b];
+	}
+	return parent[x];
+}
+
+char unify_parent(int e) {
+	int pa = get_parent(edges[e].a);
+	int pb = get_parent(edges[e].b);
+	if (pa < pb) {
+		parent[pb] = pa;
+	}
+	else if (pb < pa) {
+		parent[pa] = pb;
+	}
+	else {
+		return 0;
+	}
+	return 1;
+}
+
+int kruskal(void) {
+	heap_sort();
+
+	init_parent();
+
+	int dist = 0;
+	for (int i = 0, cnt = 0; i < e && cnt < v - 1; ++i) {
+		if (unify_parent(i)) {
+			dist += edges[i].dist;
+			cnt += 1;
+		}
+	}
+	return dist;
 }
 
 int main(void) {
 	scanf("%d %d", &v, &e);
 	for (int i = 0; i < e; ++i) {
-		int a, b, c;
-		scanf("%d %d %d", &a, &b, &c);
-		add_edge(a, b, c);
-		add_edge(b, a, c);
+		scanf("%d %d %d", &edges[i].a, &edges[i].b, &edges[i].dist);
 	}
-	printf("%d\n", MST());
+
+	printf("%d\n", kruskal());
 }
