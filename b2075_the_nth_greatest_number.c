@@ -17,7 +17,6 @@ heap_t hp;
 #define RIGHT(i) ((i << 1) + 1)
 #define KEY(i) (hp->storage[i])
 
-
 void swap(int *a, int *b) {
 	int t = *a;
 	*a = *b;
