@@ -19,24 +19,17 @@ int main(void) {
 	}
 	for (int i = 0; i < N; ++i) {
 		scanf("%d", &B[i]);
-	}
-
-	push_all_diff();
-	if (dsize) {
-		quick_sort(0, N - 1);
-	}
-
-	printf("%d\n", !dsize);
-}
-
-int push_all_diff(void) {
-	for (int i = 0; i < N; ++i) {
 		if (A[i] != B[i]) {
 			diff[i] = 1;
 			++dsize;
 		}
 	}
-	return !dsize;
+
+	if (dsize) {
+		quick_sort(0, N - 1);
+	}
+
+	printf("%d\n", !dsize);
 }
 
 void remove_if_equal(int x) {
