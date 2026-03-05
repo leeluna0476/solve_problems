@@ -74,10 +74,10 @@ int partition(int left, int right) {
 void quick_sort(int left, int right) {
 	if (left < right) {
 		int q = partition(left, right);
-		if (!cnt || dsize) {
+		if (dsize) {
 			quick_sort(left, q - 1);
 		}
-		if (!cnt || dsize) {
+		if (dsize) {
 			quick_sort(q + 1, right);
 		}
 	}
