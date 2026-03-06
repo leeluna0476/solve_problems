@@ -10,7 +10,6 @@ int N;
 int cnt;
 
 void quick_sort(int left, int right);
-int push_all_diff(void);
 
 int main(void) {
 	scanf("%d", &N);
