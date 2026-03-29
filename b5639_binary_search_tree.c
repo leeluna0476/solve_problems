@@ -18,6 +18,7 @@ node_t *create_node(int data) {
 void insert_node(node_t **head, int data) {
 	if (!*head) {
 		*head = create_node(data);
+        return;
 	}
 
 	if (data < (*head)->data) {
