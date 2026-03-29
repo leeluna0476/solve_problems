@@ -28,6 +28,16 @@ void insert_node(node_t **head, int data) {
 	}
 }
 
+void remove_tree(node_t *head) {
+	if (!head) {
+		return;
+	}
+
+	remove_tree(head->left);
+	remove_tree(head->right);
+	free(head);
+}
+
 void postorder_traversal(node_t *head) {
 	if (!head) {
 		return;
@@ -46,4 +56,5 @@ int main(void) {
 	}
 
 	postorder_traversal(head);
+	remove_tree(head);
 }
